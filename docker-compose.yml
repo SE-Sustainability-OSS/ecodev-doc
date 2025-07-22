@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+# BEGIN ecodev
+  ecodev:
+    image: squidfunk/mkdocs-material:latest
+    restart: always
+    container_name: ecodev
+    environment:
+      TZ: Europe/Paris
+    volumes:
+      - ./:/docs
+    env_file:
+      - ./.env
+    labels:
+      # Enable Traefik for this specific "backend" service
+      - traefik.enable=true
+      # Define the port inside of the Docker service to use
+      - traefik.http.services.ecodev.loadbalancer.server.port=8000
+      # Make Traefik use this domain in HTTP
+      - traefik.http.routers.ecodev-http.entrypoints=http
+      - traefik.http.routers.ecodev-http.rule=Host(`${ecodev_url}`)
+      # Use the traefik-network network (declared below)
+      - traefik.docker.network=traefik-network
+      # Make Traefik use this domain in HTTPS
+      - traefik.http.routers.ecodev-https.entrypoints=https
+      - traefik.http.routers.ecodev-https.rule=Host(`${ecodev_url}`)
+      - traefik.http.routers.ecodev-https.tls=true
+      # Use the "le" (Let's encrypt) resolver
+      - traefik.http.routers.ecodev-https.tls.certresolver=le
+      # Middleware to redirect HTTP to HTTPS, Enable HTTP Basic auth, using the middleware created in traefik
+      - traefik.http.routers.ecodev-http.middlewares=https-redirect
+      - traefik.http.routers.ecodev-https.middlewares=secured
+    networks:
+      - red-base-network
+      # Use the public network created to be shared between Traefik and
+      # any other service that needs to be publicly available with HTTPS
+      - traefik-network
+# END ecodev
+networks:
+  red-base-network:
+   name: red-base-network
+   external: true
+  traefik-network:
+    external: true
+

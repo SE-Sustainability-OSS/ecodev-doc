@@ -1,0 +1,202 @@
+site_name: EcoAct-dev
+site_description: EcoAct-dev. Python/Docker open source ressources to help small scale structure create web applications
+site_url: https://ecodev-doc.lcabox.com/
+theme:
+  name: material
+  palette:
+  - scheme: default
+    primary: custom
+    accent: amber
+    toggle:
+      icon: material/lightbulb
+      name: Switch to dark mode
+  - scheme: slate
+    primary: custom
+    accent: amber
+    toggle:
+      icon: material/lightbulb-outline
+      name: Switch to light mode
+  features:
+  - search.suggest
+  - search.highlight
+  - content.tabs.link
+  - content.code.copy
+  icon:
+    repo: fontawesome/brands/github-alt
+  logo: img/icon-white.svg
+  favicon: img/favicon.png
+  language: en
+repo_name: ecodev-core
+repo_url: https://github.com/SE-Sustainability-OSS/ecodev-core
+edit_uri: https://github.com/SE-Sustainability-OSS/ecodev-core
+nav:
+  - EcoAct-dev: index.md
+  - Setup from scratch:
+    - setup-from-scratch/index.md
+  - Libraries:
+    - Core:
+      - libraries/core/index.md
+      - Authentication:
+          - libraries/core/authentication/app_admin_auth.md
+          - libraries/core/authentication/app_user.md
+          - libraries/core/authentication/app_rights.md
+          - libraries/core/authentication/auth_configuration.md
+
+      - DB interactions:
+          - libraries/core/db_interactions/db_connection.md
+          - libraries/core/db_interactions/db_filtering.md
+          - libraries/core/db_interactions/db_insertion.md
+          - libraries/core/db_interactions/db_retrieval.md
+          - libraries/core/db_interactions/db_upsertion.md
+      - Logging:
+          - libraries/core/logging/logger.md
+      - Backup:
+          - libraries/core/backup/backup.md
+      - Dependency checks:
+          - libraries/core/dependency_checks/checks.md
+      - Monitoring:
+          - libraries/core/monitoring/app_activity.md
+      - Sending emails:
+          - libraries/core/send_email/email_sender.md
+      - Low level helpers:
+          - libraries/core/low_level_helpers/custom_equal.md
+          - libraries/core/low_level_helpers/enum_utils.md
+          - libraries/core/low_level_helpers/list_utils.md
+          - libraries/core/low_level_helpers/pandas_utils.md
+          - libraries/core/low_level_helpers/pydantic_utils.md
+          - libraries/core/low_level_helpers/read_write.md
+          - libraries/core/low_level_helpers/safe_utils.md
+    - Cloud:
+      - libraries/cloud/index.md
+      - libraries/cloud/installation.md
+      - Generic:
+          - libraries/cloud/generic/cloud.md
+          - libraries/cloud/generic/forge_key.md
+      - Read Write:
+          -  libraries/cloud/read_write/cloud_read.md
+          -  libraries/cloud/read_write/cloud_write.md
+          -  libraries/cloud/read_write/disk_read.md
+          -  libraries/cloud/read_write/disk_write.md
+      - Helpers:
+          - libraries/cloud/helpers/cloud_helpers.md
+          - libraries/cloud/helpers/disk_helpers.md
+      - Transferors:
+          - libraries/cloud/others/cloud_transferors.md
+          - libraries/cloud/others/disk_transferors.md
+    - Front:
+      - libraries/front/index.md
+      - Components:
+        - libraries/front/components/card.md
+        - libraries/front/components/data_table.md
+        - libraries/front/components/display_utils.md
+        - libraries/front/components/login.md
+        - libraries/front/components/nav_items.md
+        - libraries/front/components/navlink.md
+        - libraries/front/components/notifications.md
+        - libraries/front/components/pie_chart.md
+        - libraries/front/components/report_value.md
+        - libraries/front/components/search_bar.md
+        - libraries/front/components/segmented_controls.md
+        - libraries/front/components/selects.md
+        - libraries/front/components/steppers.md
+        - libraries/front/components/tabs.md
+        - libraries/front/components/texts.md
+        - libraries/front/components/upload_box.md
+      - Layouts:
+          - libraries/front/layouts/app_headers.md
+          - libraries/front/layouts/app_layouts.md
+          - libraries/front/layouts/div.md
+          - libraries/front/layouts/divider.md
+          - libraries/front/layouts/footer.md
+          - libraries/front/layouts/graph_box.md
+          - libraries/front/layouts/group.md
+          - libraries/front/layouts/stack.md
+  - Cookie cutters:      
+    - Infra:
+      - cookiecutters/infra/index.md
+      - Setting up VMs:
+        - cookiecutters/infra/setup/setup_ubuntu_vm.md
+      - Docker compose stacks:
+        - cookiecutters/infra/stacks/traefik.md
+        - cookiecutters/infra/stacks/db.md
+        - cookiecutters/infra/stacks/dozzle.md
+        - cookiecutters/infra/stacks/kuma.md
+        - cookiecutters/infra/stacks/bookstack.md
+        - cookiecutters/infra/stacks/ofelia.md
+        - cookiecutters/infra/stacks/minio.md
+        - cookiecutters/infra/stacks/keycloak.md
+        - cookiecutters/infra/stacks/pypi.md
+        - cookiecutters/infra/stacks/mongo-db.md
+        - cookiecutters/infra/stacks/chroma-db.md
+        - cookiecutters/infra/stacks/elasticsearch-db.md
+        - cookiecutters/infra/stacks/postgis.md
+      - cookiecutters/infra/security.md
+    - App:
+      - cookiecutters/app/index.md
+      - Layouts:
+        - cookiecutters/app/layouts/simple_layout.md
+        - cookiecutters/app/layouts/left_aside.md
+        - cookiecutters/app/layouts/right_aside.md
+        - cookiecutters/app/layouts/left_right_aside.md
+      - Inputs:
+          - cookiecutters/app/inputs/data_table.md
+          - cookiecutters/app/inputs/form.md
+          - cookiecutters/app/inputs/search_bar.md
+          - cookiecutters/app/inputs/upload_box.md
+      - Outputs:
+          - cookiecutters/app/outputs/dashboard.md
+          - cookiecutters/app/outputs/map.md
+          - cookiecutters/app/outputs/reports.md
+      - Admin:
+          - cookiecutters/app/admin/add_user.md
+          - cookiecutters/app/admin/admin_interface.md
+      - Entry points:
+          - cookiecutters/app/entry_points/dash.md
+          - cookiecutters/app/entry_points/fastapi.md
+          - cookiecutters/app/entry_points/typer.md
+      - Miscellaneous:
+          - cookiecutters/app/miscellaneous/pre_commit_hooks.md
+  - help.md
+  - contributing.md
+  - release-notes.md
+  - contact_us.md
+  
+markdown_extensions:
+- pymdownx.arithmatex:
+    generic: true
+- toc:
+    permalink: true
+- markdown.extensions.codehilite:
+    guess_lang: false
+- admonition
+- codehilite
+- extra
+- pymdownx.superfences:
+    custom_fences:
+    - name: mermaid
+      class: mermaid
+      format: !!python/name:pymdownx.superfences.fence_code_format ''
+- pymdownx.tabbed:
+    alternate_style: true
+- mdx_include
+
+
+extra:
+  social:
+  - icon: fontawesome/brands/github-alt
+    link: https://github.com/SE-Sustainability-OSS/ecodev-core
+  - icon: fontawesome/brands/linkedin
+    link: https://www.linkedin.com/company/ecoact/
+  - icon: fontawesome/solid/globe
+    link: https://eco-act.com/
+
+extra_css:
+  - css/termynal.css
+  - css/custom.css
+  - docs/css/custom.css
+
+extra_javascript:
+  - js/termynal.js
+  - js/custom.js
+  - js/mathjax.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js

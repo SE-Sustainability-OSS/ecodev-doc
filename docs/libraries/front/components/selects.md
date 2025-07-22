@@ -1,0 +1,65 @@
+# Select components
+
+
+Simple helpers around <a href=https://www.dash-mantine-components.com/components/select class="external-link" target="_blank">dmc Select</a>
+component.
+
+## Select
+
+Helper method to create a simple select, with sensible default parameters
+
+```python
+def select(id: str,
+           label: str,
+           value: Any | None = None,
+           persistence: bool = True,
+           searchable: bool = True,
+           w: str | int = '100%',
+           ) -> dmc.Select:
+    """
+   Simple select with sensible default parameters
+    """
+    return dmc.Select(
+        id=id,
+        label=label,
+        value=value,
+        data=[],
+        persistence=persistence,
+        searchable=searchable,
+        w=w
+    )
+```
+
+## select with label
+
+Helper method for creating a select with a stylized label, with sensible default parameters for the select
+
+```python
+def select_label(id: str,
+                 label: str,
+                 value: str | None = None,
+                 data: list[str] | None = None,
+                 persistence: bool = True,
+                 searchable: bool = True,
+                 allow_deselect: bool = True,
+                 disabled: bool = False,
+                 c: str = '#A0AEC0',
+                 label_id: str | None = '',
+                 stack_id: str | None = '',
+                 ) -> dmc.Stack:
+    """
+    Renders a select with a stylized label
+    """
+    return dmc.Stack([
+        dmc.Text(label, c=c, id=label_id),
+        dmc.Select(
+            id=id,
+            value=value,
+            data=data,
+            persistence=persistence,
+            searchable=searchable,
+            allowDeselect=allow_deselect,
+            disabled=disabled
+        ),
+    ], gap='xs', w='100%', id=stack_id)
+```
