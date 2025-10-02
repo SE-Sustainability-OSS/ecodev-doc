@@ -11,12 +11,14 @@ Define localized attributes and register them in `__localized_fields__`. The fal
 ```python
 from typing import Optional
 
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel
+from sqlmodel import Field
 
-from ecodev_core import I18nMixin, Lang
+from ecodev_core import I18nMixin
+from ecodev_core import Lang
 
 
-class LocalizedModel(SQLModel, I18nMixin, table=True):  # type: ignore[misc]
+class LocalizedModel(I18nMixin, SQLModel, table=True):  # type: ignore[misc]
     """Localized entity storing translated names."""
 
     __tablename__ = 'localized_model'
