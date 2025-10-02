@@ -2,6 +2,11 @@
 
 ## Latest ecodev-core Changes
 
+### 0.0.60 (2025/10/3)
+
+- Add internationalization for [sqlmodel](http://sqlmodel.tiangolo.com/) models string fields
+- Add automatic enum and column addition for existing tables for [sqlmodel](http://sqlmodel.tiangolo.com/) models.
+
 ### 0.0.45 (2025/03/13)
 
 - Add generic upsertion/versioning mechanism
