@@ -49,6 +49,7 @@ nav:
           - libraries/core/db_interactions/db_retrieval.md
           - libraries/core/db_interactions/db_upsertion.md
           - libraries/core/db_interactions/db_internationalization.md
+          - libraries/core/db_interactions/db_schema_upsertion.md
       - Logging:
           - libraries/core/logging/logger.md
       - Backup:
