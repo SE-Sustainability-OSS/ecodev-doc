@@ -195,7 +195,6 @@ extra:
 extra_css:
   - css/termynal.css
   - css/custom.css
-  - docs/css/custom.css
 
 extra_javascript:
   - js/termynal.js
