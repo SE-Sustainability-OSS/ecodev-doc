@@ -68,6 +68,9 @@ nav:
           - libraries/core/low_level_helpers/pydantic_utils.md
           - libraries/core/low_level_helpers/read_write.md
           - libraries/core/low_level_helpers/safe_utils.md
+      - Rest API client:
+          - libraries/core/rest_api_client/rest_api_client.md
+          - libraries/core/rest_api_client/rest_api_configuration.md
     - Cloud:
       - libraries/cloud/index.md
       - libraries/cloud/installation.md
