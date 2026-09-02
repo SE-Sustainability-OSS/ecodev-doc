@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Revenue to Valuation Calculator
+  </title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <script>
+   window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+  </script>
+  <style>
+   /* Theme tokens */
+  :root {
+  --green:#3DCD58;
+  --green-soft:#6EDA82;
+  --green-mid:#2BA45D;
+  --green-dark:#21392C;
+  --deep:#00351D;
+  --blue:#236594;
+  --lime:#CDFC67;
+  --page:#F5F8F6;
+  --surface:#fff;
+  --soft:#F7FAF8;
+  --border:#C9D8CF;
+  --text:#00351D;
+  --secondary:#3F6655;
+  --muted:#71847A;
+  --danger:#B42318
+}
+
+* {
+  box-sizing:border-box;
+  margin:0;
+  padding:0
+}
+
+body {
+  min-height:100vh;
+  background:var(--page);
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
+  font-size:14px;
+  line-height:1.45
+}
+
+button,input {
+  font:inherit
+}
+
+.hero {
+  padding:30px 32px 26px;
+  position:relative;
+  overflow:hidden;
+  background-image:radial-gradient(ellipse at 22% 32%,rgba(71,161,88,.52),transparent 54%),radial-gradient(ellipse at 76% 60%,rgba(53,144,70,.36),transparent 52%),linear-gradient(120deg,#063314,#064616)
+}
+
+.hero:after {
+  content:"";
+  position:absolute;
+  top:-150px;
+  right:-70px;
+  width:440px;
+  height:440px;
+  border:1px solid rgba(160,231,238,.18);
+  border-radius:50%
+}
+
+.hero-inner,.main {
+  width:min(1380px,calc(100% - 24px));
+  margin:auto;
+  position:relative;
+  z-index:1
+}
+
+.eyebrow {
+  margin-bottom:5px;
+  color:var(--green);
+  font-size:.72rem;
+  font-weight:700;
+  letter-spacing:.13em;
+  text-transform:uppercase
+}
+
+h1 {
+  color:#fff;
+  font-size:clamp(1.8rem,3vw,2.5rem);
+  font-weight:800;
+  letter-spacing:-.035em;
+  line-height:1.08
+}
+
+h1 em {
+  color:var(--green);
+  font-style:normal
+}
+
+.subtitle {
+  max-width:850px;
+  margin-top:8px;
+  color:rgba(255,255,255,.82);
+  font-size:.92rem
+}
+
+.main {
+  padding:14px 0 28px
+}
+
+.tabs {
+  display:flex;
+  background:#fff;
+  border:1px solid var(--border);
+  border-bottom:0
+}
+
+.tab {
+  padding:13px 20px;
+  border:0;
+  border-right:1px solid var(--border);
+  background:#fff;
+  color:var(--secondary);
+  font-weight:700;
+  cursor:pointer
+}
+
+.tab.active {
+  color:#fff;
+  background:var(--deep)
+}
+
+.panel {
+  display:none
+}
+
+.panel.active {
+  display:block
+}
+
+.workspace {
+  background:var(--surface);
+  border:1px solid var(--border)
+}
+
+.workspace-head {
+  padding:15px 18px;
+  border-bottom:1px solid var(--border)
+}
+
+.workspace-head h2 {
+  font-size:1.05rem;
+  font-weight:800
+}
+
+.workspace-head p {
+  margin-top:2px;
+  color:var(--muted);
+  font-size:.72rem
+}
+
+.calc-grid {
+  display:grid;
+  grid-template-columns:minmax(340px,.85fr) minmax(400px,1.15fr)
+}
+
+.controls {
+  padding:18px;
+  border-right:1px solid var(--border)
+}
+
+.section-label {
+  margin-bottom:12px;
+  color:var(--muted);
+  font-size:.65rem;
+  font-weight:800;
+  letter-spacing:.1em;
+  text-transform:uppercase
+}
+
+.input-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px
+}
+
+.field {
+  display:flex;
+  flex-direction:column;
+  gap:6px
+}
+
+.field.full {
+  grid-column:1/-1
+}
+
+.field label {
+  display:flex;
+  justify-content:space-between;
+  color:var(--secondary);
+  font-size:.69rem;
+  font-weight:700;
+  text-transform:uppercase
+}
+
+.field small {
+  color:var(--muted);
+  font-weight:500;
+  text-transform:none
+}
+
+.input-wrap {
+  display:flex;
+  align-items:center;
+  height:40px;
+  background:var(--soft);
+  border:1px solid var(--border)
+}
+
+.input-wrap:focus-within {
+  border-color:var(--green);
+  box-shadow:0 0 0 2px rgba(61,205,88,.12)
+}
+
+.input-wrap input[type=number] {
+  width:100%;
+  height:100%;
+  padding:0 10px;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:var(--text);
+  font-weight:700
+}
+
+.suffix {
+  padding-right:10px;
+  color:var(--muted);
+  font-size:.75rem
+}
+
+.slider-card {
+  padding:12px;
+  background:var(--soft);
+  border:1px solid var(--border)
+}
+
+.slider-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  margin-bottom:8px
+}
+
+.slider-title {
+  color:var(--secondary);
+  font-size:.69rem;
+  font-weight:700;
+  text-transform:uppercase
+}
+
+.slider-value {
+  font-size:1rem;
+  font-weight:800
+}
+
+.slider-card input[type=range] {
+  width:100%;
+  accent-color:var(--green-mid)
+}
+
+.range-labels {
+  display:flex;
+  justify-content:space-between;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:.61rem
+}
+
+.results {
+  padding:18px;
+  background:linear-gradient(180deg,#fff,#F7FAF8)
+}
+
+.hero-result {
+  padding:22px;
+  color:#fff;
+  background:var(--deep);
+  position:relative;
+  overflow:hidden
+}
+
+.hero-result:after {
+  content:"";
+  position:absolute;
+  width:180px;
+  height:180px;
+  right:-70px;
+  top:-90px;
+  border:1px solid rgba(110,218,130,.35);
+  border-radius:50%
+}
+
+.result-label {
+  color:var(--green-soft);
+  font-size:.68rem;
+  font-weight:800;
+  letter-spacing:.1em;
+  text-transform:uppercase
+}
+
+.result-value {
+  margin-top:5px;
+  font-size:clamp(2rem,4vw,3.3rem);
+  font-weight:800;
+  letter-spacing:-.04em
+}
+
+.result-note {
+  margin-top:5px;
+  color:rgba(255,255,255,.7);
+  font-size:.72rem
+}
+
+.metric-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin-top:10px
+}
+
+.metric {
+  padding:13px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-top:3px solid var(--green-mid)
+}
+
+.metric-label {
+  color:var(--muted);
+  font-size:.61rem;
+  font-weight:800;
+  text-transform:uppercase
+}
+
+.metric-value {
+  margin-top:4px;
+  font-size:1.15rem;
+  font-weight:800
+}
+
+.metric-note {
+  margin-top:3px;
+  color:var(--muted);
+  font-size:.62rem
+}
+
+.formula-strip {
+  margin-top:10px;
+  padding:13px;
+  background:#fff;
+  border:1px solid var(--border);
+  color:var(--secondary);
+  font-size:.72rem
+}
+
+.warning {
+  display:none;
+  margin-top:10px;
+  padding:10px;
+  color:var(--danger);
+  background:#FFF1F0;
+  border:1px solid #FDA29B;
+  font-size:.7rem
+}
+
+.derivation {
+  padding:22px;
+  max-width:1000px
+}
+
+.derivation h3 {
+  margin:20px 0 7px;
+  font-size:1rem
+}
+
+.derivation h3:first-child {
+  margin-top:0
+}
+
+.derivation p {
+  margin:7px 0;
+  color:var(--secondary)
+}
+
+.math-block {
+  margin:12px 0;
+  padding:14px;
+  overflow-x:auto;
+  background:var(--soft);
+  border-left:3px solid var(--green-mid)
+}
+
+.assumption {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin:14px 0
+}
+
+.assumption div {
+  padding:11px;
+  background:#fff;
+  border:1px solid var(--border)
+}
+
+.assumption strong {
+  display:block;
+  font-size:.68rem;
+  text-transform:uppercase
+}
+
+.assumption span {
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:.67rem
+}
+
+footer {
+  padding:12px 24px;
+  color:rgba(255,255,255,.5);
+  background:var(--deep);
+  font-size:.65rem;
+  text-align:center
+}
+
+@media(max-width:850px) {
+  /* Calculator layout and controls */
+  .calc-grid {
+    grid-template-columns:1fr
+  }
+
+  .controls {
+    border-right:0;
+    border-bottom:1px solid var(--border)
+  }
+
+  .metric-grid,.assumption {
+    grid-template-columns:1fr
+  }
+
+}
+
+@media(max-width:520px) {
+  .input-grid {
+    grid-template-columns:1fr
+  }
+
+  .field.full {
+    grid-column:auto
+  }
+
+  /* Hero */
+  .hero {
+    padding-left:20px;
+    padding-right:20px
+  }
+
+  .result-value {
+    font-size:2rem
+  }
+
+}
+
+/* Source attribution links */
+a {
+  color: var(--blue);
+  font-weight: 600;
+  text-underline-offset: 2px;
+}
+a:hover,
+a:focus-visible {
+  color: var(--green-mid);
+}
+.source-note {
+  max-width: 960px;
+  margin-top: 6px;
+}
+  </style>
+ </head>
+ <body>
+  <header class="hero">
+   <div class="hero-inner">
+    <div class="eyebrow">
+     Financial quantification &middot; DCF model
+    </div>
+    <h1>
+     Revenue to
+     <em>
+      Valuation
+     </em>
+    </h1>
+    <p class="subtitle">
+     Estimate the current annual revenue required to support a target enterprise valuation (DCF model).
+    </p>
+   </div>
+  </header>
+  <main class="main">
+   <nav aria-label="Application views" class="tabs">
+    <button aria-selected="true" class="tab active" data-tab="calculator" role="tab" type="button">
+     Revenue calculator
+    </button>
+    <button aria-selected="false" class="tab" data-tab="derivation" role="tab" type="button">
+     Formula derivation
+    </button>
+   </nav>
+   <section class="panel active workspace" id="calculator" role="tabpanel">
+    <div class="workspace-head">
+     <h2>
+      Required revenue calculator
+     </h2>
+     <p>
+      Adjust the valuation assumptions. Results update instantly and are expressed in USD.
+      <a href="https://www.linkedin.com/pulse/ais-bar-mitzvah-moment-from-hope-hype-hard-business-aswath-damodaran-i312f/" rel="noopener noreferrer" target="_blank">
+       Original source: Aswath Damodaran.
+      </a>
+     </p>
+    </div>
+    <div class="calc-grid">
+     <div class="controls">
+      <div class="section-label">
+       Model assumptions
+      </div>
+      <div class="input-grid">
+       <div class="field">
+        <label for="perpetual">
+         Perpetual growth
+         <small>
+          g&infin;
+         </small>
+        </label>
+        <div class="input-wrap">
+         <input id="perpetual" max="20" min="-5" step="0.1" type="number" value="4"/>
+         <span class="suffix">
+          %
+         </span>
+        </div>
+       </div>
+       <div class="field">
+        <label for="wacc">
+         WACC
+         <small>
+          &omega;
+         </small>
+        </label>
+        <div class="input-wrap">
+         <input id="wacc" max="50" min="0.1" step="0.1" type="number" value="12.5"/>
+         <span class="suffix">
+          %
+         </span>
+        </div>
+       </div>
+       <div class="field full">
+        <label for="terminal">
+         Terminal year
+         <small>
+          T
+         </small>
+        </label>
+        <div class="input-wrap">
+         <input id="terminal" max="100" min="1" step="1" type="number" value="15"/>
+         <span class="suffix">
+          years
+         </span>
+        </div>
+       </div>
+       <div class="field full">
+        <div class="slider-card">
+         <div class="slider-top">
+          <span class="slider-title">
+           Operating margin &middot; 1 &minus; &alpha;
+          </span>
+          <span class="slider-value" id="marginValue">
+           25.0%
+          </span>
+         </div>
+         <input id="margin" max="50" min="5" step="0.5" type="range" value="25"/>
+         <div class="range-labels">
+          <span>
+           5%
+          </span>
+          <span>
+           50%
+          </span>
+         </div>
+        </div>
+       </div>
+       <div class="field full">
+        <div class="slider-card">
+         <div class="slider-top">
+          <span class="slider-title">
+           Target NPV
+          </span>
+          <span class="slider-value" id="npvValue">
+           $1,000B
+          </span>
+         </div>
+         <input id="npv" max="4000" min="100" step="10" type="range" value="1000"/>
+         <div class="range-labels">
+          <span>
+           $100B
+          </span>
+          <span>
+           $4,000B
+          </span>
+         </div>
+        </div>
+       </div>
+       <div class="field full">
+        <div class="slider-card">
+         <div class="slider-top">
+          <span class="slider-title">
+           Explicit growth &middot; g
+          </span>
+          <span class="slider-value" id="growthValue">
+           8.0%
+          </span>
+         </div>
+         <input id="growth" max="12.5" min="4" step="0.1" type="range" value="8"/>
+         <div class="range-labels">
+          <span id="growthMin">
+           g&infin; &middot; 4.0%
+          </span>
+          <span id="growthMax">
+           &omega; &middot; 12.5%
+          </span>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="warning" hidden="" id="warning" role="alert">
+      </div>
+     </div>
+     <div class="results">
+      <div class="section-label">
+       Calculated output
+      </div>
+      <div class="hero-result">
+       <div class="result-label">
+        Required current annual revenue
+       </div>
+       <div class="result-value" id="revenueResult">
+        $0B
+       </div>
+       <div class="result-note">
+        Year-0 revenue, assuming free cash flow equals revenue &times; operating margin.
+       </div>
+      </div>
+      <div class="metric-grid">
+       <article class="metric">
+        <div class="metric-label">
+         Year-T revenue
+        </div>
+        <div class="metric-value" id="terminalRevenue">
+         $0B
+        </div>
+        <div class="metric-note">
+         After explicit growth
+        </div>
+       </article>
+       <article class="metric">
+        <div class="metric-label">
+         Year-1 free cash flow
+        </div>
+        <div class="metric-value" id="firstFcf">
+         $0B
+        </div>
+        <div class="metric-note">
+         FCF₁ = Y(1&minus;&alpha;)(1+g)
+        </div>
+       </article>
+       <article class="metric">
+        <div class="metric-label">
+         Terminal value share
+        </div>
+        <div class="metric-value" id="terminalShare">
+         0%
+        </div>
+        <div class="metric-note">
+         PV of terminal value / NPV
+        </div>
+       </article>
+      </div>
+      <div class="formula-strip">
+       <strong>
+        Inverse valuation:
+       </strong>
+       <span id="formulaText">
+        Y = V / [(1&minus;&alpha;) &times; valuation factor]
+       </span>
+      </div>
+     </div>
+    </div>
+   </section>
+   <section class="panel workspace" id="derivation" role="tabpanel">
+    <div class="workspace-head">
+     <h2>
+      Two-stage NPV derivation
+     </h2>
+     <p>
+      Explicit growth through year T, followed by stable perpetual growth.
+     </p>
+     <p class="source-note">
+      The original reverse-engineering framework was developed by
+      <a href="https://www.linkedin.com/pulse/ais-bar-mitzvah-moment-from-hope-hype-hard-business-aswath-damodaran-i312f/" rel="noopener noreferrer" target="_blank">
+       Aswath Damodaran
+      </a>
+      . It is adapted here to make the DCF derivation explicit and to distinguish the nominal growth rate during the forecast period from the perpetual growth rate.
+     </p>
+    </div>
+    <div class="derivation">
+     <h3>
+      1. Standard valuation identity
+     </h3>
+     <p>
+      The enterprise value is the present value of all future free cash flows:
+     </p>
+     <div class="math-block">
+      \[V=\sum_{t=1}^{+\infty}\frac{FCF_t}{(1+\omega)^t}.\]
+     </div>
+     <p>
+      Splitting the valuation at terminal year \(T\):
+     </p>
+     <div class="math-block">
+      \[V=\sum_{t=1}^{T}\frac{FCF_t}{(1+\omega)^t}+\frac{FCF_T}{(1+\omega)^T}\sum_{k=1}^{+\infty}\left(\frac{1+g_\infty}{1+\omega}\right)^k.\]
+     </div>
+     <div class="assumption">
+      <div>
+       <strong>
+        Explicit period
+       </strong>
+       <span>
+        Growth rate \(g\) through year \(T\)
+       </span>
+      </div>
+      <div>
+       <strong>
+        Stable period
+       </strong>
+       <span>
+        Perpetual growth \(g_\infty\) after year \(T\)
+       </span>
+      </div>
+      <div>
+       <strong>
+        Cash conversion
+       </strong>
+       <span>
+        \(FCF_t=Y_t(1-\alpha)\)
+       </span>
+      </div>
+     </div>
+     <h3>
+      2. Substitute the growth assumptions
+     </h3>
+     <p>
+      If \(Y\) is year-0 revenue, then \(FCF_t=Y(1-\alpha)(1+g)^t\) for \(1\le t\le T\). The first stable-period cash flow is \(FCF_{T+1}=FCF_T(1+g_\infty)\).
+     </p>
+     <div class="math-block">
+      \[V=Y(1-\alpha)\frac{1+g}{1+\omega}\sum_{t=0}^{T-1}\left(\frac{1+g}{1+\omega}\right)^t+Y(1-\alpha)\left(\frac{1+g}{1+\omega}\right)^T\frac{1+g_\infty}{\omega-g_\infty}.\]
+     </div>
+     <h3>
+      3. Closed-form valuation
+     </h3>
+     <p>
+      Evaluating the geometric series and simplifying gives:
+     </p>
+     <div class="math-block">
+      \[\boxed{V=Y(1-\alpha)\frac{1+g}{\omega-g}\left[1-\left(\frac{1+g}{1+\omega}\right)^{T-1}\frac{g-g_\infty}{\omega-g_\infty}\right]}\]
+     </div>
+     <h3>
+      4. Solve for required revenue
+     </h3>
+     <p>
+      The calculator rearranges the expression to isolate \(Y\):
+     </p>
+     <div class="math-block">
+      \[\boxed{Y=\frac{V}{(1-\alpha)\dfrac{1+g}{\omega-g}\left[1-\left(\dfrac{1+g}{1+\omega}\right)^{T-1}\dfrac{g-g_\infty}{\omega-g_\infty}\right]}}\]
+     </div>
+     <p>
+      <strong>
+       Conditions:
+      </strong>
+      \(\omega&gt;g_\infty\) is required for the perpetual series to converge. The app also handles the limiting case \(g=\omega\) by computing the explicit-period sum directly rather than dividing by \(\omega-g\).
+     </p>
+    </div>
+   </section>
+  </main>
+  <footer>
+   Revenue to Valuation &middot; discounted cash flow (DCF) model
+  </footer>
+  <script>
+   (() => {
+  'use strict';
+
+  const PERCENT_SCALE = 100;
+  const TRILLION_IN_BILLIONS = 1000;
+  const INVALID_OUTPUT = '—';
+  const OUTPUT_IDS = [
+    'revenueResult',
+    'terminalRevenue',
+    'firstFcf',
+    'terminalShare',
+  ];
+
+  const inputs = {
+    perpetualGrowth: getElement('perpetual'),
+    wacc: getElement('wacc'),
+    terminalYear: getElement('terminal'),
+    operatingMargin: getElement('margin'),
+    targetNpv: getElement('npv'),
+    explicitGrowth: getElement('growth'),
+  };
+
+  /**
+   * Returns an element by ID and fails early when the markup is inconsistent.
+   *
+   * @param {string} id Element ID.
+   * @return {HTMLElement} Matching DOM element.
+   */
+  function getElement(id) {
+    const element = document.getElementById(id);
+    if (!element) {
+      throw new Error(`Missing required element: #${id}`);
+    }
+    return element;
+  }
+
+  /**
+   * Reads a numeric form value.
+   *
+   * @param {HTMLInputElement} input Input containing a numeric value.
+   * @return {number} Parsed value, or NaN when parsing fails.
+   */
+  function readNumber(input) {
+    return Number.parseFloat(input.value);
+  }
+
+  /**
+   * Converts a percentage input to a decimal rate.
+   *
+   * @param {HTMLInputElement} input Percentage input.
+   * @return {number} Decimal rate.
+   */
+  function readRate(input) {
+    return readNumber(input) / PERCENT_SCALE;
+  }
+
+  /**
+   * Formats a value expressed in billions of US dollars.
+   *
+   * @param {number} value Value in USD billions.
+   * @return {string} Human-readable monetary value.
+   */
+  function formatBillions(value) {
+    if (!Number.isFinite(value)) {
+      return INVALID_OUTPUT;
+    }
+
+    if (value >= TRILLION_IN_BILLIONS) {
+      return `$${(value / TRILLION_IN_BILLIONS).toLocaleString(undefined, {
+        maximumFractionDigits: 2,
+      })}T`;
+    }
+
+    return `$${value.toLocaleString(undefined, {
+      maximumFractionDigits: 1,
+    })}B`;
+  }
+
+  /**
+   * Collects and normalizes the current valuation assumptions.
+   *
+   * @return {{
+   *   perpetualGrowth: number,
+   *   wacc: number,
+   *   terminalYear: number,
+   *   operatingMargin: number,
+   *   targetNpv: number,
+   *   explicitGrowth: number
+   * }} Model assumptions.
+   */
+  function getAssumptions() {
+    return {
+      perpetualGrowth: readRate(inputs.perpetualGrowth),
+      wacc: readRate(inputs.wacc),
+      terminalYear: Math.max(1, Math.round(readNumber(inputs.terminalYear))),
+      operatingMargin: readRate(inputs.operatingMargin),
+      targetNpv: readNumber(inputs.targetNpv),
+      explicitGrowth: readRate(inputs.explicitGrowth),
+    };
+  }
+
+  /**
+   * Keeps explicit growth between perpetual growth and WACC.
+   */
+  function synchronizeGrowthRange() {
+    const perpetualGrowth = readNumber(inputs.perpetualGrowth);
+    const wacc = readNumber(inputs.wacc);
+
+    if (!Number.isFinite(perpetualGrowth) || !Number.isFinite(wacc)) {
+      return;
+    }
+
+    const minimum = Math.min(perpetualGrowth, wacc);
+    const maximum = Math.max(perpetualGrowth, wacc);
+    const current = readNumber(inputs.explicitGrowth);
+    const bounded = Math.min(maximum, Math.max(minimum, current));
+
+    inputs.explicitGrowth.min = String(minimum);
+    inputs.explicitGrowth.max = String(maximum);
+    inputs.explicitGrowth.value = String(bounded);
+
+    getElement('growthMin').textContent = `g∞ · ${minimum.toFixed(1)}%`;
+    getElement('growthMax').textContent = `ω · ${maximum.toFixed(1)}%`;
+  }
+
+  /**
+   * Updates labels associated with the form controls.
+   *
+   * @param {ReturnType<typeof getAssumptions>} assumptions Model assumptions.
+   */
+  function renderInputLabels(assumptions) {
+    inputs.terminalYear.value = String(assumptions.terminalYear);
+    getElement('marginValue').textContent =
+        `${(assumptions.operatingMargin * PERCENT_SCALE).toFixed(1)}%`;
+    getElement('npvValue').textContent = formatBillions(assumptions.targetNpv);
+    getElement('growthValue').textContent =
+        `${(assumptions.explicitGrowth * PERCENT_SCALE).toFixed(1)}%`;
+  }
+
+  /**
+   * Validates assumptions required by the DCF model.
+   *
+   * @param {ReturnType<typeof getAssumptions>} assumptions Model assumptions.
+   * @return {string} Empty string when valid; otherwise an error message.
+   */
+  function getValidationError(assumptions) {
+    const values = Object.values(assumptions);
+    if (values.some((value) => !Number.isFinite(value))) {
+      return 'Enter valid assumptions.';
+    }
+
+    if (assumptions.operatingMargin <= 0) {
+      return 'Operating margin must be greater than zero.';
+    }
+
+    if (assumptions.wacc <= assumptions.perpetualGrowth) {
+      return 'WACC must be greater than perpetual growth for the terminal value to converge.';
+    }
+
+    return '';
+  }
+
+  /**
+   * Calculates the explicit-period discount factor.
+   *
+   * Direct summation avoids the removable singularity in the closed-form
+   * expression when explicit growth equals WACC.
+   *
+   * @param {number} growth Explicit growth rate.
+   * @param {number} wacc Weighted average cost of capital.
+   * @param {number} terminalYear Final explicit forecast year.
+   * @return {number} Sum of discounted explicit-period revenue factors.
+   */
+  function calculateExplicitFactor(growth, wacc, terminalYear) {
+    let factor = 0;
+    const ratio = (1 + growth) / (1 + wacc);
+
+    for (let year = 1; year <= terminalYear; year += 1) {
+      factor += ratio ** year;
+    }
+
+    return factor;
+  }
+
+  /**
+   * Calculates the present-value factor for the terminal period.
+   *
+   * @param {ReturnType<typeof getAssumptions>} assumptions Model assumptions.
+   * @return {number} Discounted terminal-value factor.
+   */
+  function calculateTerminalFactor(assumptions) {
+    const growthRatio =
+        (1 + assumptions.explicitGrowth) / (1 + assumptions.wacc);
+    const perpetuityFactor =
+        (1 + assumptions.perpetualGrowth) /
+        (assumptions.wacc - assumptions.perpetualGrowth);
+
+    return growthRatio ** assumptions.terminalYear * perpetuityFactor;
+  }
+
+  /**
+   * Calculates required revenue and supporting valuation metrics.
+   *
+   * @param {ReturnType<typeof getAssumptions>} assumptions Model assumptions.
+   * @return {{
+   *   requiredRevenue: number,
+   *   terminalRevenue: number,
+   *   firstYearFcf: number,
+   *   terminalShare: number,
+   *   valuationFactor: number
+   * }} Calculated outputs.
+   */
+  function calculateOutputs(assumptions) {
+    const explicitFactor = calculateExplicitFactor(
+        assumptions.explicitGrowth,
+        assumptions.wacc,
+        assumptions.terminalYear,
+    );
+    const terminalFactor = calculateTerminalFactor(assumptions);
+    const valuationFactor = explicitFactor + terminalFactor;
+    const requiredRevenue =
+        assumptions.targetNpv /
+        (assumptions.operatingMargin * valuationFactor);
+    const terminalRevenue =
+        requiredRevenue *
+        (1 + assumptions.explicitGrowth) ** assumptions.terminalYear;
+    const firstYearFcf =
+        requiredRevenue *
+        assumptions.operatingMargin *
+        (1 + assumptions.explicitGrowth);
+    const terminalPresentValue =
+        requiredRevenue * assumptions.operatingMargin * terminalFactor;
+
+    return {
+      requiredRevenue,
+      terminalRevenue,
+      firstYearFcf,
+      terminalShare: terminalPresentValue / assumptions.targetNpv,
+      valuationFactor,
+    };
+  }
+
+  /**
+   * Displays a validation message and clears calculated outputs.
+   *
+   * @param {string} message Validation error.
+   */
+  function renderError(message) {
+    const warning = getElement('warning');
+    warning.textContent = message;
+    warning.hidden = false;
+    OUTPUT_IDS.forEach((id) => {
+      getElement(id).textContent = INVALID_OUTPUT;
+    });
+  }
+
+  /**
+   * Hides the validation message.
+   */
+  function clearError() {
+    const warning = getElement('warning');
+    warning.textContent = '';
+    warning.hidden = true;
+  }
+
+  /**
+   * Renders calculated valuation outputs.
+   *
+   * @param {ReturnType<typeof getAssumptions>} assumptions Model assumptions.
+   * @param {ReturnType<typeof calculateOutputs>} outputs Calculated outputs.
+   */
+  function renderOutputs(assumptions, outputs) {
+    getElement('revenueResult').textContent =
+        formatBillions(outputs.requiredRevenue);
+    getElement('terminalRevenue').textContent =
+        formatBillions(outputs.terminalRevenue);
+    getElement('firstFcf').textContent =
+        formatBillions(outputs.firstYearFcf);
+    getElement('terminalShare').textContent =
+        `${(outputs.terminalShare * PERCENT_SCALE).toFixed(1)}%`;
+    getElement('formulaText').textContent =
+        `Y = ${formatBillions(assumptions.targetNpv)} ÷ [` +
+        `${(assumptions.operatingMargin * PERCENT_SCALE).toFixed(1)}% × ` +
+        `${outputs.valuationFactor.toFixed(2)}] = ` +
+        formatBillions(outputs.requiredRevenue);
+  }
+
+  /**
+   * Recalculates and renders the full application state.
+   */
+  function updateCalculator() {
+    synchronizeGrowthRange();
+    const assumptions = getAssumptions();
+    renderInputLabels(assumptions);
+
+    const error = getValidationError(assumptions);
+    if (error) {
+      renderError(error);
+      return;
+    }
+
+    clearError();
+    renderOutputs(assumptions, calculateOutputs(assumptions));
+  }
+
+  /**
+   * Activates the selected application tab.
+   *
+   * @param {HTMLButtonElement} selectedTab Tab selected by the user.
+   */
+  function activateTab(selectedTab) {
+    document.querySelectorAll('.tab').forEach((tab) => {
+      tab.classList.toggle('active', tab === selectedTab);
+      tab.setAttribute('aria-selected', String(tab === selectedTab));
+    });
+
+    document.querySelectorAll('.panel').forEach((panel) => {
+      panel.classList.toggle('active', panel.id === selectedTab.dataset.tab);
+    });
+  }
+
+  /**
+   * Registers all application event listeners.
+   */
+  function initializeEventListeners() {
+    Object.values(inputs).forEach((input) => {
+      input.addEventListener('input', updateCalculator);
+    });
+
+    document.querySelectorAll('.tab').forEach((tab) => {
+      tab.addEventListener('click', () => activateTab(tab));
+    });
+  }
+
+  initializeEventListeners();
+  updateCalculator();
+})();
+  </script>
+ </body>
+</html>
