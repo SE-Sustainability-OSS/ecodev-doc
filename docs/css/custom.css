@@ -27,7 +27,10 @@ a.internal-link::after {
 }
 
 :root {
-  --md-primary-fg-color:        #0066A1;
-  --md-primary-fg-color--light: #96afd0;
-  --md-primary-fg-color--dark:  #96afd0;
+  --md-primary-fg-color:        #007A27;
+  --md-primary-fg-color--light: #4FD267;
+  --md-primary-fg-color--dark:  #00682b;
+  --md-accent-fg-color:         #1FB144;
+  --md-accent-fg-color--transparent: #00351D;
+  --md-mermaid-label-fg-color:  #fff;
 }
