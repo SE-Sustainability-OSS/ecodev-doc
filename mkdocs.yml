@@ -58,6 +58,9 @@ nav:
           - libraries/core/dependency_checks/checks.md
       - Monitoring:
           - libraries/core/monitoring/app_activity.md
+          - libraries/core/monitoring/app_stats_overview.md
+          - libraries/core/monitoring/producer_guide.md
+          - libraries/core/monitoring/consumer_guide.md
       - Sending emails:
           - libraries/core/send_email/email_sender.md
       - Low level helpers:
